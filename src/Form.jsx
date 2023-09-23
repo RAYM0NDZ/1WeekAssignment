@@ -1,33 +1,28 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 
 const Form = (props) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const trackName = (event) => {
-    setName(event.target.value);
-  };
-  const trackEmail = (event) => {
-    setEmail(event.target.value);
-  };
-  const trackAddress = (event) => {
-    setAddress(event.target.value);
-  };
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const addressRef = useRef();
   const trackData = (event) => {
     if (
-      name.trim().length === 0 ||
-      email.trim().length === 0 ||
-      address.trim().length === 0
+      nameRef.current.value.trim().length === 0 ||
+      emailRef.current.value.trim().length === 0 ||
+      addressRef.current.value.trim().length === 0
     ) {
       window.alert("PleaseFillValidInput!");
       return;
     }
     event.preventDefault();
-    const data = { name, email, address };
+    const data = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      address: addressRef.current.value,
+    };
     props.getData(data);
-    setName("");
-    setEmail("");
-    setAddress("");
+    nameRef.current.value = "";
+    emailRef.current.value = "";
+    addressRef.current.value = "";
   };
   return (
     <div className="col-3">
@@ -37,8 +32,7 @@ const Form = (props) => {
             type="text"
             className="form-control"
             placeholder="Name"
-            value={name}
-            onChange={trackName}
+            ref={nameRef}
           />
         </div>
         <div className="form-group mt-3">
@@ -46,8 +40,7 @@ const Form = (props) => {
             type="text"
             className="form-control"
             placeholder="Email"
-            value={email}
-            onChange={trackEmail}
+            ref={emailRef}
           />
         </div>{" "}
         <div className="form-group mt-3">
@@ -55,8 +48,7 @@ const Form = (props) => {
             type="text"
             className="form-control"
             placeholder="Address"
-            value={address}
-            onChange={trackAddress}
+            ref={addressRef}
           />
         </div>
         <button type="submit" className="btn btn-primary mt-3">
